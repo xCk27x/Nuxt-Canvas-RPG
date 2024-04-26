@@ -6,19 +6,16 @@ export default class ItemObject implements ItemConfig{
   y: number;
   src: string;
   sprite: SpriteObject;
-  direction: string = 'Down';
+  direction: string;
   
   constructor(config: ItemConfig) {
     this.x = config.x || 0;
     this.y = config.y || 0;
     this.src = config.src;
-    this.direction = config.direction || 'Down';
+    this.direction = config.firstDirection || 'down';
     this.sprite = new SpriteObject({
       src: config.src,
-      animations: config.animations || {
-        idleDown: [0, 0],
-      },
-      currentAnimation: config.currentAnimation || 'idleDown',
+      firstAnimation: config.firstAnimation ?? 'walk-up',
     });
   }
 

@@ -2,7 +2,10 @@ export type SpriteConfig = {
   src: string,
   shadow?: string,
   animations?: {
-    idleDown: [number, number],
+    [key: string]: [number, number][],
   },
-  currentAnimation?: string;
+  firstAnimation?: string;
+  animationFrameLimit?: number;
+  frameHeight?: number;
+  frameWidth?: number;
 };

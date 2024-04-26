@@ -4,12 +4,11 @@ import type { PersonConfig } from "~/types/Person";
 export default class PersonObject extends ItemObject{
   movingProgressRemaining: number = 0;
   isPlayerControlled: boolean;
-  direction: string = 'Down';
   directionUpdate = {
-    'Up': ['y', -1],
-    'Down': ['y', 1],
-    'Left': ['x', -1],
-    'Right': ['x', 1]
+    'up': ['y', -1],
+    'down': ['y', 1],
+    'left': ['x', -1],
+    'right': ['x', 1],
   }
 
   constructor(config: PersonConfig){
@@ -19,19 +18,30 @@ export default class PersonObject extends ItemObject{
 
   update(state: any): void {
     this.updatePosition();
+    this.updateSprite(state);
 
-    if (this.movingProgressRemaining === 0 && state.arrow) {
+    if (this.isPlayerControlled && this.movingProgressRemaining === 0 && state.arrow) {
       this.direction = state.arrow;
       this.movingProgressRemaining = 16;
     }
   };
-
+  
   updatePosition(): void {
-    if (this.movingProgressRemaining > 0){
+    if (this.movingProgressRemaining > 0) {
       const [property, change] = directionUpdate(this.direction);
-      if (this.isPlayerControlled) {}
       property === 'x' ? this.x += change: this.y += change;
-      this.movingProgressRemaining -= 1;
+      this.movingProgressRemaining -= 2;
     }
+  }
+  
+  updateSprite(state: any): void {
+    if (this.movingProgressRemaining === 0 && !state.arrow) {
+      this.sprite.setAnimation(`idle-${this.direction}`);
+      return;
+    }
+
+    if (this.movingProgressRemaining > 0) {
+      this.sprite.setAnimation(`walk-${this.direction}`);
+    }   
   }
 }

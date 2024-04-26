@@ -22,7 +22,6 @@ export default class MapObject{
     createImage(ctx, this.lowerLayer.src, x, y);
     this.renderItems(ctx);
     createImage(ctx, this.upperLayer.src, x, y);
-    console.log(this.inputObject);
     this.inputObject.init();
   }
 
@@ -38,7 +37,7 @@ export default class MapObject{
     this.items.forEach((item) => { 
       if (item instanceof PersonObject) {
         item.update({
-          arrow: this.inputObject.getDirection()
+          arrow: this.inputObject.direction,
         });
       }
       item.draw(ctx);

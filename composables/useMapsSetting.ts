@@ -9,16 +9,17 @@ export default function useMapsSetting() {
       items: [
         new PersonObject({
           name: 'hero',
+          isPlayerControlled: true,
           x: withGridX(5),
           y: withGridY(2),
-          direction: 'Down',
+          firstDirection: 'left',
           src: '/characters/hero.png',
         }),
         new PersonObject({
           name: 'erio',
           x: withGridX(5),
           y: withGridY(6),
-          direction: 'Down',
+          firstDirection: 'right',
           src: '/characters/erio.png',
         })
       ],
@@ -32,14 +33,14 @@ export default function useMapsSetting() {
           isPlayerControlled: true,
           x: withGridX(5),
           y: withGridY(2),
-          direction: 'Down',
+          firstDirection: 'down',
           src: '/characters/hero.png',
         }), 
         new PersonObject({
           name: 'erio',
           x: withGridX(5),
           y: withGridY(6),
-          direction: 'Down',
+          firstDirection: 'down',
           src: '/characters/erio.png',
         })
       ],

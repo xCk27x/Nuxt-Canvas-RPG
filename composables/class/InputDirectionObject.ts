@@ -3,30 +3,25 @@ type m = {[key: string]: string};
 export default class InputObject {
   private heldDirections: string[];
   private map: m = {
-    "ArrowUp": "Up",
-    "KeyW": "Up",
-    "ArrowDown": "Down",
-    "KeyS": "Down",
-    "ArrowLeft": "Left",
-    "KeyA": "Left",
-    "ArrowRight": "Right",
-    "KeyD": "Right"
+    "ArrowUp": "up",
+    "KeyW": "up",
+    "ArrowDown": "down",
+    "KeyS": "down",
+    "ArrowLeft": "left",
+    "KeyA": "left",
+    "ArrowRight": "right",
+    "KeyD": "right"
   }
 
-  keydown(event: KeyboardEvent): void {}
-  keyup(event: KeyboardEvent): void {}
+  private keydown(event: KeyboardEvent): void {}
+  private keyup(event: KeyboardEvent): void {}
 
   constructor() {
     this.heldDirections = [];
-    console.log(this.map);
     this.keydown = (event: KeyboardEvent) => {
-      console.log(event.code);
-      console.log(this.map);
       const direction = this.map[event.code];
       if (direction && this.heldDirections.indexOf(direction) === -1) {
-        console.log(direction);
         this.heldDirections.unshift(direction);
-        console.log(this.heldDirections);
       }
     }
     this.keyup = (event: KeyboardEvent) => {
@@ -34,13 +29,12 @@ export default class InputObject {
       const index = this.heldDirections.indexOf(direction);
       if (index > -1) {
         this.heldDirections.splice(index, 1);
-        console.log(this.heldDirections);
       }
     }
   }
 
 
-  getDirection() {
+  get direction() {
     return this.heldDirections[0];
   }
 

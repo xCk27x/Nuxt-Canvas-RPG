@@ -1,11 +1,11 @@
 export type ItemConfig = {
   x: number;
   y: number;
-  direction?: string;
+  firstDirection?: string;
   src: string;
   animations?: {
     idleDown: [number, number],
   };
-  currentAnimation?: string;
+  firstAnimation?: string;
   draw?(ctx: CanvasRenderingContext2D): void;
 }
