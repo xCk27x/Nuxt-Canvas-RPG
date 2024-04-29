@@ -1,6 +1,11 @@
 import ItemObject from "./ItemObject";
 import type { PersonConfig } from "~/types/Person";
 
+type stateConfig = {
+  arrow: string;
+  cantGo: boolean;
+}
+
 export default class PersonObject extends ItemObject{
   name: string;
   movingProgressRemaining: number = 0;
@@ -30,32 +35,41 @@ export default class PersonObject extends ItemObject{
     this.isPlayerControlled = config.isPlayerControlled || false;
   }
 
-  update(state: any): void {
-    this.updatePosition();
-    this.updateSprite(state);
-
-    if (this.isPlayerControlled && this.movingProgressRemaining === 0 && state.arrow) {
-      this.direction = state.arrow;
-      this.movingProgressRemaining = 16;
+  
+  update(state: stateConfig): void {
+    if (this.movingProgressRemaining > 0) {
+      // person haven't finish moving, keep updating the position
+      this.updatePosition();
+    } else {
+      // person is not moving, ready to start a new behavior
+      if (this.isPlayerControlled && state.arrow) {
+        this.startBehavior(state, {
+            type: 'walk',
+            direction: state.arrow
+        })
+      }
+      this.updateSprite();
     }
   };
+
+  startBehavior(state: any, behavior: any): void {
+    this.direction = behavior.direction;
+    if (behavior.type === 'walk' && !state.cantGo)
+      this.movingProgressRemaining = 16;
+  }
   
   updatePosition(): void {
     if (this.movingProgressRemaining > 0) {
       const [property, change] = directionUpdate(this.direction);
       property === 'x' ? this.x += change: this.y += change;
-      this.movingProgressRemaining -= 2;
+      this.movingProgressRemaining -= 1;
     }
   }
   
-  updateSprite(state: any): void {
-    if (this.movingProgressRemaining === 0 && !state.arrow) {
-      this.sprite.setAnimation(`idle-${this.direction}`);
-      return;
-    }
-
-    if (this.movingProgressRemaining > 0) {
+  updateSprite(): void {
+    if (this.movingProgressRemaining > 0)
       this.sprite.setAnimation(`walk-${this.direction}`);
-    }   
+    else
+      this.sprite.setAnimation(`idle-${this.direction}`);
   }
 }

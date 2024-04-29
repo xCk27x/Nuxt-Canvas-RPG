@@ -30,7 +30,19 @@ export default class MapObject{
 
   isNextPositionUnvalid(curX: number, curY: number, direction: string) {
     const [x, y] = nextPosition(curX, curY, direction);
-    return this.walls[asGridCoord(x, y)] ? true : false;
+    return this.walls[`${x},${y}`] ?? false;
+  }
+
+  addWall(x: number, y: number) {
+    this.walls[`${x},${y}`] = true;
+  }
+  removeWall(x: number, y: number) {
+    delete this.walls[`${x},${y}`];
+  }
+  moveWall(x: number, y: number, direction: string) {
+    this.removeWall(x, y);
+    [x, y] = nextPosition(x, y, direction);
+    this.addWall(x, y);
   }
 
   // step1: update the direction of the person
@@ -39,6 +51,7 @@ export default class MapObject{
       if (item instanceof PersonObject) {
         item.update({
           arrow: this.inputObject.direction,
+          cantGo: this.isNextPositionUnvalid(item.x, item.y, this.inputObject.direction)
         });
       }
     });
@@ -65,5 +78,4 @@ export default class MapObject{
     ctx.drawImage(this.upperLayer, x, y);
     //ctx.drawImage(this.image, frameX * this.frameHeight, frameY * this.frameWidth, this.frameHeight, this.frameWidth, x, y, this.frameHeight, this.frameWidth);
   }
-  
 }

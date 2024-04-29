@@ -8,16 +8,16 @@
 const canvas = ref<HTMLCanvasElement>();
 const ctx = ref<CanvasRenderingContext2D>();
 import MapObject from '~/composables/class/MapObject';
-import InputObject from '~/composables/class/InputDirectionObject';
 
-const location = useLocationStore();
+const where = useAtStore();
 let map: MapObject;
-let inputListener: InputObject;
 
 function initCanvas() {
   canvas.value = document.getElementById('canvas') as HTMLCanvasElement;
   ctx.value = canvas.value.getContext('2d') as CanvasRenderingContext2D;
-  map = new MapObject(ctx.value!, location.curLocation);
+
+  //
+  map = new MapObject(ctx.value!, where.at);
 }
 
 function startGameLoop() {
@@ -31,14 +31,9 @@ function startGameLoop() {
   })()
 }
 
-function initInputListener() {
-  inputListener = new InputObject();
-  inputListener.init();
-}
-
+// where the game starts
 onMounted(() => {
   initCanvas();
-  initInputListener();
   startGameLoop();
 })
 </script>
