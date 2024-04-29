@@ -11,6 +11,7 @@ export default class MapObject{
   upperLayer: HTMLImageElement;
   items: ItemObject[];
   private inputObject: InputDirectionObject = new InputDirectionObject();
+  centerPerson: PersonObject;
   
   constructor(ctx: CanvasRenderingContext2D, map: string, x: number = 0, y: number = 0) {
     this.mapsSetting = useMapsSetting()[map];
@@ -23,6 +24,7 @@ export default class MapObject{
     this.renderItems(ctx);
     createImage(ctx, this.upperLayer.src, x, y);
     this.inputObject.init();
+    this.centerPerson = this.items.find(item => item instanceof PersonObject && item.name === 'hero') as PersonObject;
   }
 
   renderLowerMap(ctx: CanvasRenderingContext2D, x: number = 0, y: number = 0) {
@@ -40,7 +42,7 @@ export default class MapObject{
           arrow: this.inputObject.direction,
         });
       }
-      item.draw(ctx);
+      item.draw(ctx, this.centerPerson);
     });
   }
 }

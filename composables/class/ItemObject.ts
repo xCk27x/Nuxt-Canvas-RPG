@@ -1,5 +1,6 @@
 import type { ItemConfig } from '~/types/Item';
 import SpriteObject from './SpriteObject';
+import type PersonObject from './PersonObject';
 
 export default class ItemObject implements ItemConfig{
   x: number;
@@ -19,7 +20,7 @@ export default class ItemObject implements ItemConfig{
     });
   }
 
-  draw(ctx: CanvasRenderingContext2D): void {
-    this.sprite.draw(ctx, this.x, this.y);
+  draw(ctx: CanvasRenderingContext2D, centerPerson: PersonObject): void {
+    this.sprite.draw(ctx, this.x, this.y, centerPerson);
   }
 }

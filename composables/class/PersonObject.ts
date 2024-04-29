@@ -2,6 +2,7 @@ import ItemObject from "./ItemObject";
 import type { PersonConfig } from "~/types/Person";
 
 export default class PersonObject extends ItemObject{
+  name: string;
   movingProgressRemaining: number = 0;
   isPlayerControlled: boolean;
   directionUpdate = {
@@ -13,6 +14,7 @@ export default class PersonObject extends ItemObject{
 
   constructor(config: PersonConfig){
     super(config);
+    this.name = config.name;
     this.isPlayerControlled = config.isPlayerControlled || false;
   }
 
