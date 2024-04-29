@@ -53,7 +53,7 @@ export default class MapObject{
 
   // step3: render items
   renderItems(ctx: CanvasRenderingContext2D) {
-    this.items.forEach((item) => { 
+    this.items.forEach((item) => {
       item.draw(ctx, this.centerPerson);
     });
   }

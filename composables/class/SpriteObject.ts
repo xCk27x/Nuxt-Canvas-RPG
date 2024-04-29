@@ -5,7 +5,7 @@ export default class SpriteObject {
   private isLoad: boolean = false;
   image: HTMLImageElement;
   shadow: HTMLImageElement;
-  animations: {[key: string]: [number, number][]}
+  animations: {[key: string]: [number, number][]} | undefined;
   private currentAnimation: string;
   private currentFrame: number;
   animationFrameLimit: number;
@@ -26,17 +26,9 @@ export default class SpriteObject {
     };
     this.shadow.src = config.shadow || "/characters/shadow.png";
     
-    this.animations = config.animations || {
-      "idle-down": [[0, 0]],
-      "idle-right": [[0, 1]],
-      "idle-up": [[0, 2]],
-      "idle-left": [[0, 3]],
-      "walk-down": [[1, 0], [0, 0], [3, 0], [0, 0]],
-      "walk-right": [[1, 1], [0, 1], [3, 1], [0, 1]],
-      "walk-up": [[1, 2], [0, 2], [3, 2], [0, 2]],
-      "walk-left": [[1, 3], [0, 3], [3, 3], [0, 3]],
-    };
-    
+    this.animations = config.animations || undefined;
+    console.log("this.animations", this.animations);
+
     this.currentAnimation = config.firstAnimation ?? "idle-down";
     this.currentFrame = 0;
     this.animationFrameLimit = config.animationFrameLimit ?? 16;
@@ -73,14 +65,18 @@ export default class SpriteObject {
   }
 
   draw(ctx: CanvasRenderingContext2D, x: number, y: number, centerPerson: PersonObject): void {
-    x = x - 8 + withGridX(9) - centerPerson.x;
-    y = y - 18 + withGridY(4) - centerPerson.y;
+    if (this.animations === undefined) {
+      x = x + withGridX(9) - centerPerson.x;
+      y = y + withGridY(4) - centerPerson.y;
+      ctx.drawImage(this.image, x, y);
+    } else {
+      x = x - 8 + withGridX(9) - centerPerson.x;
+      y = y - 18 + withGridY(4) - centerPerson.y;
+      const [frameX, frameY] = this.frame ?? [1, 1];
+      ctx.drawImage(this.image, frameX * this.frameHeight, frameY * this.frameWidth, this.frameHeight, this.frameWidth, x, y, this.frameHeight, this.frameWidth);
+      ctx.drawImage(this.shadow, x, y);
+      this.updateAnimationProgress();
+    }
 
-    const [frameX, frameY] = this.frame ?? [0, 0];
-
-    ctx.drawImage(this.image, frameX * this.frameHeight, frameY * this.frameWidth, this.frameHeight, this.frameWidth, x, y, this.frameHeight, this.frameWidth);
-    ctx.drawImage(this.shadow, x, y);
-
-    this.updateAnimationProgress();
   }
 }

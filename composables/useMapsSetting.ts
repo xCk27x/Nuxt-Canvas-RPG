@@ -1,5 +1,6 @@
 import type { MapsConfig } from '~/types/Map';
 import PersonObject from './class/PersonObject';
+import ItemObject from './class/ItemObject';
 
 export default function useMapsSetting() {
   return <MapsConfig> {
@@ -21,6 +22,11 @@ export default function useMapsSetting() {
           y: withGridY(6),
           firstDirection: 'right',
           src: '/characters/erio.png',
+        }),
+        new ItemObject({
+          x: withGridX(5),
+          y: withGridY(4),
+          src: '/items/chill.png',
         })
       ],
       walls: {

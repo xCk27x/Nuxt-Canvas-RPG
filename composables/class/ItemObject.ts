@@ -7,16 +7,17 @@ export default class ItemObject implements ItemConfig{
   y: number;
   src: string;
   sprite: SpriteObject;
-  direction: string;
   
   constructor(config: ItemConfig) {
     this.x = config.x || 0;
     this.y = config.y || 0;
     this.src = config.src;
-    this.direction = config.firstDirection || 'down';
+    
     this.sprite = new SpriteObject({
       src: config.src,
-      firstAnimation: config.firstAnimation ?? 'walk-up',
+      shadow: config.shadow,
+      animations: config.animations,
+      firstAnimation: config.firstAnimation ?? 'idle-down',
     });
   }
 
