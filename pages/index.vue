@@ -23,9 +23,9 @@ function initCanvas() {
 function startGameLoop() {
   (function step() {
     ctx.value!.clearRect(0, 0, canvas.value!.width, canvas.value!.height);
+    map.updateItems();
     map.renderLowerMap(ctx.value!);
     map.renderItems(ctx.value!);
-    // map.items.forEach(item => item.x += 0.02);
     map.renderUpperMap(ctx.value!);
     requestAnimationFrame(step);
   })()

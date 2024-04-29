@@ -73,9 +73,9 @@ export default class SpriteObject {
   }
 
   draw(ctx: CanvasRenderingContext2D, x: number, y: number, centerPerson: PersonObject): void {
-    x = x - 8 + withGridX(10.5) - centerPerson.x;
-    y = y - 18 + withGridY(10.5) - centerPerson.y;
-    
+    x = x - 8 + withGridX(9) - centerPerson.x;
+    y = y - 18 + withGridY(4) - centerPerson.y;
+
     const [frameX, frameY] = this.frame ?? [0, 0];
 
     ctx.drawImage(this.image, frameX * this.frameHeight, frameY * this.frameWidth, this.frameHeight, this.frameWidth, x, y, this.frameHeight, this.frameWidth);

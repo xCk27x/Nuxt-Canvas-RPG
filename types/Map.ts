@@ -5,6 +5,9 @@ export type MapConfig = {
   items: ItemObject[];
   lowerLayer: string;
   upperLayer: string;
+  walls?: {
+    [key: string]: boolean;
+  }
 }
 
 export type MapsConfig = {

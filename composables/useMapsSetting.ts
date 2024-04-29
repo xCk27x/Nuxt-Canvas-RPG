@@ -23,6 +23,12 @@ export default function useMapsSetting() {
           src: '/characters/erio.png',
         })
       ],
+      walls: {
+        [asGridCoord(7, 6)]: true,
+        [asGridCoord(8, 6)]: true,
+        [asGridCoord(7, 7)]: true,
+        [asGridCoord(8, 7)]: true,
+      }
     },
     'DemoRoom2': {
       lowerLayer: '/maps/Demo/DemoLower.png',
