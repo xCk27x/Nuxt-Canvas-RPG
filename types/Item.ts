@@ -1,11 +1,13 @@
+import type PersonObject from "~/composables/class/PersonObject";
+
 export type ItemConfig = {
   x: number;
   y: number;
-  firstDirection?: string;
   src: string;
+  shadow?: string;
   animations?: {
-    idleDown: [number, number],
+    [key: string]: [number, number][],
   };
   firstAnimation?: string;
-  draw?(ctx: CanvasRenderingContext2D): void;
+  draw?(ctx: CanvasRenderingContext2D, centerPerson: PersonObject): void;
 }
