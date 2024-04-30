@@ -18,6 +18,7 @@ function initCanvas() {
 
   //
   map = new MapObject(ctx.value!, where.at);
+  map.mountObjects();
 }
 
 function startGameLoop() {

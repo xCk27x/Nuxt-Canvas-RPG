@@ -1,9 +1,11 @@
 import ItemObject from "./ItemObject";
 import type { PersonConfig } from "~/types/Person";
+import type MapObject from "./MapObject";
 
 type stateConfig = {
   arrow: string;
   cantGo: boolean;
+  map: MapObject;
 }
 
 export default class PersonObject extends ItemObject{
@@ -54,8 +56,10 @@ export default class PersonObject extends ItemObject{
 
   startBehavior(state: any, behavior: any): void {
     this.direction = behavior.direction;
-    if (behavior.type === 'walk' && !state.cantGo)
+    if (behavior.type === 'walk' && !state.cantGo) {
+      state.map.moveWall(this.x, this.y, this.direction);
       this.movingProgressRemaining = 16;
+    }
   }
   
   updatePosition(): void {

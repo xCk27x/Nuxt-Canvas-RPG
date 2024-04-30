@@ -33,6 +33,13 @@ export default class MapObject{
     return this.walls[`${x},${y}`] ?? false;
   }
 
+  mountObjects() {
+    this.items.forEach(item => {
+      item.isMounted = true;
+      this.addWall(item.x, item.y);
+    }); 
+  }
+
   addWall(x: number, y: number) {
     this.walls[`${x},${y}`] = true;
   }
@@ -51,7 +58,8 @@ export default class MapObject{
       if (item instanceof PersonObject) {
         item.update({
           arrow: this.inputObject.direction,
-          cantGo: this.isNextPositionUnvalid(item.x, item.y, this.inputObject.direction)
+          cantGo: this.isNextPositionUnvalid(item.x, item.y, this.inputObject.direction),
+          map: this,
         });
       }
     });

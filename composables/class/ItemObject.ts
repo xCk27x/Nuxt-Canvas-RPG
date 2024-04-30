@@ -3,6 +3,7 @@ import SpriteObject from './SpriteObject';
 import type PersonObject from './PersonObject';
 
 export default class ItemObject implements ItemConfig{
+  isMounted = false;
   x: number;
   y: number;
   src: string;
@@ -19,6 +20,12 @@ export default class ItemObject implements ItemConfig{
       animations: config.animations,
       firstAnimation: config.firstAnimation ?? 'idle-down',
     });
+  }
+
+  mount(map: any) {
+    this.isMounted = true;
+    map.items.push(this);
+
   }
 
   draw(ctx: CanvasRenderingContext2D, centerPerson: PersonObject): void {
