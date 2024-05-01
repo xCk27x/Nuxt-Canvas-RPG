@@ -1,75 +1,55 @@
-# Nuxt 3 Minimal Starter
+# Nuxt Canvas RPG
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## install
 
-## Setup
+basic installation step ->
 
-Make sure to install the dependencies:
+```git clone https://github.com/xCk27x/nuxt-canvas.git <project-name>```
 
-```bash
-# npm
-npm install
+```cd <project-name>``` 
 
-# pnpm
-pnpm install
+```npm install```
 
-# yarn
-yarn install
+then type in ```npm run dev``` to start the game
 
-# bun
-bun install
+## Get Start
+I set the canvas game as a page, so you can find this page in /pages/index.vue
+in this file, <template> have a cnavas element, if you want to change the size of this canvas element, please modify the values in ```/stores/canvasStore.ts```.
+
+<img src="https://github.com/xCk27x/nuxt-canvas/assets/90547641/3f943ef9-9602-4a55-acd5-633700c48724" width="500" />
+
+## Settings
+
+All the Settings you are going to modify is in the composables directory, there is an TS file called ```useMapSettings.ts```, there are three main things you need to provide to create a map
+1. **lowerLayer**: a string, denotes the floor of this map, any item will cover it.
+  
+2. **upperLayer**: a string, denotes the ceiling of this map, it will cover all the items and lowerLayer.
+  
+3. **items**: an array, the type of element can fit into this array is defined in ```'composables/class/ItemObject.ts'```, but I know it's hard to find out what is legal for this array, so you can read next chapter and get the detail.
+
+4. **walls**: all the walls in the map, I know what you are wondering: **I need to key in all the walls by myself?** Yep, there is no AI this project, so I can't know what you are thinking.
+
+## Items
+
+There are 2 kinds of Item:
+1. **PersonObject**: if an item can move or trigger event, then this item is a PersonObject.
+```type is defined in ~/types/Person.ts```
+
+```typescript
+new PersonObject({
+  name: 'characterName', // Character's Name
+  x: withGridX(8), // initial X position
+  y: withGridY(9), // initial Y position
+  firstDirection: 'up',
+  src: '/characters/npc1.png',
+  behaviorLoop: [
+    { type: 'stand', direction: 'right', time: 800 },
+    { type: 'stand', direction: 'down' , time: 800 },
+    { type: 'stand', direction: 'left', time: 1200},
+    { type: 'stand', direction: 'up', time: 300},
+  ]
+}),
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+2. **ItemObject**: if an item cannot do anything except render on the map, then this item is an ItemObject
+```type is defined in ~/types/Item.ts```
