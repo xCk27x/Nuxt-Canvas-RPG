@@ -38,15 +38,15 @@ There are 2 kinds of Item:
 ```typescript
 new PersonObject({
   name: 'characterName', // Character's Name
-  x: withGridX(8), // initial X position
-  y: withGridY(9), // initial Y position
-  firstDirection: 'up',
+  x: withGridX(1), // initial X position
+  y: withGridY(2), // initial Y position
+  firstDirection: 'up', // 'up', 'down', 'left', 'right'
   src: '/characters/npc1.png',
   behaviorLoop: [
-    { type: 'stand', direction: 'right', time: 800 },
-    { type: 'stand', direction: 'down' , time: 800 },
-    { type: 'stand', direction: 'left', time: 1200},
-    { type: 'stand', direction: 'up', time: 300},
+    { type: 'stand', direction: 'right', time: 800 },  // type: 'stand', 'walk'
+    { type: 'stand', direction: 'down' , time: 800 },  // direction: 'up', 'down', 'left', 'right'
+    { type: 'stand', direction: 'left', time: 1200},   // time: number (ms)
+    { type: 'stand', direction: 'up', time: 300},      // it's a loop of behavior
   ]
 }),
 ```
