@@ -53,3 +53,13 @@ new PersonObject({
 
 2. **ItemObject**: if an item cannot do anything except render on the map, then this item is an ItemObject
 ```type is defined in ~/types/Item.ts```
+
+## Walls
+Each map can set its wall in ```useMapSettings.ts```, it's an attribute **walls** with type {[key: string]: Boolean}.
+We provide two ways to let you build a wall:
+1. [asGridCoord(x, y)]: true
+this function return a string and let the place [x, y] cannot be walked in.
+
+2. ...asGridCoordXY([x1, x2], [y1, y2])
+this function returns an object, and set a block all tobe walls.
+[x1, y1] is the left top coordiate, [x2, y2] is the right bottom coordiate.  
