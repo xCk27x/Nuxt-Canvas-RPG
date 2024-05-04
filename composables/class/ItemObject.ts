@@ -3,6 +3,7 @@ import SpriteObject from './SpriteObject';
 import type PersonObject from './PersonObject';
 
 export default class ItemObject implements ItemConfig{
+  id: number = -1;
   isMounted = false;
   x: number;
   y: number;
@@ -24,7 +25,7 @@ export default class ItemObject implements ItemConfig{
 
   mount(map: any) {
     this.isMounted = true;
-    map.items.push(this);
+    map.addWall(this.x, this.y);
 
   }
 

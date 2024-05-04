@@ -1,6 +1,7 @@
 import type PersonObject from "~/composables/class/PersonObject";
 
 export type ItemConfig = {
+  id?: number | null;
   x: number;
   y: number;
   src: string;

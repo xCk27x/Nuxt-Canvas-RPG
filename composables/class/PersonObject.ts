@@ -1,8 +1,10 @@
 import ItemObject from "./ItemObject";
 import type { PersonConfig } from "~/types/Person";
 import type MapObject from "./MapObject";
+import type { BehaviorLoopConfig } from "~/types/Behavior";
+import { templateUtils } from "nuxt/kit";
 
-type stateConfig = {
+export type stateConfig = {
   arrow: string;
   cantGo: boolean;
   map: MapObject;
@@ -19,6 +21,7 @@ export default class PersonObject extends ItemObject{
     'left': ['x', -1],
     'right': ['x', 1],
   }
+  behaviorLoop: BehaviorLoopConfig;
 
   constructor(config: PersonConfig) {
     config.animations = {
@@ -35,6 +38,7 @@ export default class PersonObject extends ItemObject{
     this.direction = config.firstDirection || 'down';
     this.name = config.name;
     this.isPlayerControlled = config.isPlayerControlled || false;
+    this.behaviorLoop = config.behaviorLoop ?? [];
   }
 
   
@@ -59,14 +63,18 @@ export default class PersonObject extends ItemObject{
     if (behavior.type === 'walk' && !state.cantGo) {
       state.map.moveWall(this.x, this.y, this.direction);
       this.movingProgressRemaining = 16;
+      this.updateSprite();
     }
   }
   
   updatePosition(): void {
-    if (this.movingProgressRemaining > 0) {
-      const [property, change] = directionUpdate(this.direction);
-      property === 'x' ? this.x += change: this.y += change;
-      this.movingProgressRemaining -= 1;
+    const [property, change] = directionUpdate(this.direction);
+    property === 'x' ? this.x += change: this.y += change;
+    this.movingProgressRemaining -= 1;
+
+    if (this.movingProgressRemaining === 0) {
+      // 1 step walk finish
+      emitEvent('personCompleteWalk', { whoId: this.id });
     }
   }
   

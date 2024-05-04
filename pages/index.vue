@@ -1,6 +1,6 @@
 <template>
   <div class="canvas_container">
-    <canvas id="canvas" width="300" height="200" />
+    <canvas id="canvas" :width="canvasSize.width" :height="canvasSize.height" />
   </div>
 </template>
 
@@ -10,14 +10,15 @@ const ctx = ref<CanvasRenderingContext2D>();
 import MapObject from '~/composables/class/MapObject';
 
 const where = useAtStore();
+const canvasSize = useCanvasStore();
 let map: MapObject;
 
 function initCanvas() {
   canvas.value = document.getElementById('canvas') as HTMLCanvasElement;
   ctx.value = canvas.value.getContext('2d') as CanvasRenderingContext2D;
 
-  //
   map = new MapObject(ctx.value!, where.at);
+  // add walls
   map.mountObjects();
 }
 
@@ -28,7 +29,7 @@ function startGameLoop() {
     map.renderLowerMap(ctx.value!);
     map.renderItems(ctx.value!);
     map.renderUpperMap(ctx.value!);
-    requestAnimationFrame(step);
+    requestAnimationFrame(step); // each frame will trigger step again
   })()
 }
 

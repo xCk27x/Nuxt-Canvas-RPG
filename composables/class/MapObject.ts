@@ -2,6 +2,7 @@ import type { MapConfig } from '~/types/Map';
 import ItemObject from './ItemObject';
 import PersonObject from './PersonObject';
 import InputDirectionObject from './InputDirectionObject';
+import EventHandler from './EventHandler';
 
 export default class MapObject{
   mapsSetting: MapConfig;
@@ -10,10 +11,17 @@ export default class MapObject{
   items: ItemObject[];
   private inputObject: InputDirectionObject = new InputDirectionObject();
   centerPerson: PersonObject;
-  walls: {[key: string]: boolean}
+  walls: {[key: string]: boolean};
+  behaviorLoopIndex: number = 0;
+  leftToCenter: number;
+  topToCenter: number;
   
   constructor(ctx: CanvasRenderingContext2D, map: string, x: number = 0, y: number = 0) {
     this.mapsSetting = useMapsSetting()[map];
+
+    const canvasStore = useCanvasStore();
+    this.leftToCenter = canvasStore.leftToCenter;
+    this.topToCenter = canvasStore.topToCenter;
     
     this.inputObject.init();
     
@@ -34,10 +42,34 @@ export default class MapObject{
   }
 
   mountObjects() {
+    this.items.map((item, i) => {
+      item.id = i;
+      return item;
+    });
+
     this.items.forEach(item => {
       item.isMounted = true;
+
       this.addWall(item.x, item.y);
+
+      if (item instanceof PersonObject) {
+          this.doBehaviorLoop(item);
+      }
     }); 
+  }
+  async doBehaviorLoop(person: PersonObject) {
+    if (person.isPlayerControlled || person.behaviorLoop.length === 0) {
+      return;
+    }
+
+    let curEvent = person.behaviorLoop[this.behaviorLoopIndex];
+    curEvent.who = person.id;
+
+    const handler = new EventHandler({map: this, event: curEvent});
+    await handler.init();
+    this.behaviorLoopIndex = (this.behaviorLoopIndex + 1) % person.behaviorLoop.length;
+
+      this.doBehaviorLoop(person);
   }
 
   addWall(x: number, y: number) {
@@ -67,8 +99,8 @@ export default class MapObject{
 
   // step2: render lower map
   renderLowerMap(ctx: CanvasRenderingContext2D, x: number = 0, y: number = 0) {
-    x = x + withGridX(9) - this.centerPerson.x;
-    y = y + withGridY(4) - this.centerPerson.y;
+    x = x + withGridX(this.leftToCenter) - this.centerPerson.x;
+    y = y + withGridY(this.topToCenter) - this.centerPerson.y;
     ctx.drawImage(this.lowerLayer, x, y);
   }
 
@@ -81,8 +113,8 @@ export default class MapObject{
 
   // step4: render upper map
   renderUpperMap(ctx: CanvasRenderingContext2D, x: number = 0, y: number = 0) {
-    x = x + withGridX(9) - this.centerPerson.x;
-    y = y + withGridY(4) - this.centerPerson.y;
+    x = x + withGridX(this.leftToCenter) - this.centerPerson.x;
+    y = y + withGridY(this.topToCenter) - this.centerPerson.y;
     ctx.drawImage(this.upperLayer, x, y);
     //ctx.drawImage(this.image, frameX * this.frameHeight, frameY * this.frameWidth, this.frameHeight, this.frameWidth, x, y, this.frameHeight, this.frameWidth);
   }

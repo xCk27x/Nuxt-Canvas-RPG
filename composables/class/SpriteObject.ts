@@ -1,6 +1,7 @@
 import type { SpriteConfig } from "@/types/Sprite";
 import type PersonObject from "./PersonObject";
 
+
 export default class SpriteObject {
   private isLoad: boolean = false;
   image: HTMLImageElement;
@@ -12,8 +13,14 @@ export default class SpriteObject {
   private animationFrameProgress: number;
   frameHeight: number = 32;
   frameWidth: number = 32;
+  leftToCenter: number;
+  topToCenter: number;
 
   constructor(config: SpriteConfig) {
+    const canvasStore = useCanvasStore();
+    this.leftToCenter = canvasStore.leftToCenter;
+    this.topToCenter = canvasStore.topToCenter;
+
     this.image = new Image();
     this.image.onload = () => {
       this.isLoad = true;
@@ -27,12 +34,11 @@ export default class SpriteObject {
     this.shadow.src = config.shadow || "/characters/shadow.png";
     
     this.animations = config.animations || undefined;
-    console.log("this.animations", this.animations);
 
     this.currentAnimation = config.firstAnimation ?? "idle-down";
     this.currentFrame = 0;
-    this.animationFrameLimit = config.animationFrameLimit ?? 16;
-    this.animationFrameProgress = 16;
+    this.animationFrameLimit = config.animationFrameLimit ?? 8;
+    this.animationFrameProgress = 8;
   }
 
   get frame(): [number, number] | undefined {
@@ -66,12 +72,12 @@ export default class SpriteObject {
 
   draw(ctx: CanvasRenderingContext2D, x: number, y: number, centerPerson: PersonObject): void {
     if (this.animations === undefined) {
-      x = x + withGridX(9) - centerPerson.x;
-      y = y + withGridY(4) - centerPerson.y;
+      x = x + withGridX(this.leftToCenter) - centerPerson.x;
+      y = y + withGridY(this.topToCenter) - centerPerson.y;
       ctx.drawImage(this.image, x, y);
     } else {
-      x = x - 8 + withGridX(9) - centerPerson.x;
-      y = y - 18 + withGridY(4) - centerPerson.y;
+      x = x - 8 + withGridX(this.leftToCenter) - centerPerson.x;
+      y = y - 18 + withGridY(this.topToCenter) - centerPerson.y;
       const [frameX, frameY] = this.frame ?? [1, 1];
       ctx.drawImage(this.image, frameX * this.frameHeight, frameY * this.frameWidth, this.frameHeight, this.frameWidth, x, y, this.frameHeight, this.frameWidth);
       ctx.drawImage(this.shadow, x, y);
